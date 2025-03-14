@@ -1,26 +1,29 @@
 package steps;
 
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import net.serenitybdd.core.pages.PageObject;
-import org.openqa.selenium.By;
+import io.cucumber.java.en.Then;
+import net.thucydides.core.annotations.Steps;
+import pages.GooglePage;
 
-public class GoogleSearchSteps extends PageObject {
+public class GoogleSearchSteps {
+    
+    @Steps
+    private GooglePage googlePage;
 
     @Given("I open Google homepage")
     public void openGoogleHomepage() {
-        getDriver().get("https://www.google.com");
+        googlePage.openGooglePage();
     }
 
     @When("I search for {string}")
     public void searchFor(String searchTerm) {
-        $(By.name("q")).sendKeys(searchTerm);
-        $(By.name("q")).submit();
+        googlePage.enterSearchTerm(searchTerm);
+        googlePage.submitSearch();
     }
 
     @Then("I should see results")
     public void verifyResults() {
-        $(By.id("search")).shouldBeVisible();
+        assert googlePage.areResultsVisible();
     }
 }
